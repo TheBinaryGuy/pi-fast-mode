@@ -1,0 +1,24 @@
+package.json
+  s_d0f0daeffa94fb::t_21448b4c7f958a 2,8-10,13,15,17
+  s_d0f0daeffa94fb::t_02e264ddde48ec 3
+README.md
+  s_d0f0daeffa94fb::t_564a581dc1de3e 1,16,22
+package-lock.json
+  s_d0f0daeffa94fb::t_6689fe3c523844 2-3,8-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "8e9b778dc3c734d059f30f499782b4add3db442a",
+  "prompts": {},
+  "sessions": {
+    "s_d0f0daeffa94fb": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f6232-9878-7b8b-a859-f979d4fa9052",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "TheBinaryGuy <hello@thebinary.dev>"
+    }
+  }
+}
