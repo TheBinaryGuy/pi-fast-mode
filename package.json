@@ -1,0 +1,52 @@
+{
+  "name": "pi-openai-codex-fast-mode",
+  "version": "0.1.0",
+  "description": "Toggle persistent OpenAI Codex Fast mode in Pi using priority service tier requests.",
+  "type": "module",
+  "license": "MIT",
+  "author": "TheBinaryGuy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheBinaryGuy/pi-openai-codex-fast-mode.git"
+  },
+  "homepage": "https://github.com/TheBinaryGuy/pi-openai-codex-fast-mode#readme",
+  "bugs": {
+    "url": "https://github.com/TheBinaryGuy/pi-openai-codex-fast-mode/issues"
+  },
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "pi-coding-agent",
+    "openai",
+    "codex",
+    "fast-mode",
+    "priority"
+  ],
+  "files": [
+    "extensions",
+    "LICENSE",
+    "README.md"
+  ],
+  "pi": {
+    "extensions": [
+      "./extensions/openai-codex-fast-mode.ts"
+    ]
+  },
+  "scripts": {
+    "check": "prettier --check . && tsgo --noEmit && vitest run",
+    "format": "prettier --write ."
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "0.80.7",
+    "@types/node": "26.1.1",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "prettier": "3.9.5",
+    "vitest": "4.1.10"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}
