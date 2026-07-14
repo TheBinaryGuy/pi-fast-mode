@@ -1,6 +1,6 @@
 {
   "name": "pi-openai-codex-fast-mode",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Toggle persistent OpenAI Codex Fast mode in Pi using priority service tier requests.",
   "type": "module",
   "license": "MIT",
@@ -33,7 +33,7 @@
     ]
   },
   "scripts": {
-    "check": "prettier --check . && tsgo --noEmit && vitest run",
+    "check": "prettier --check . && tsc --noEmit && vitest run",
     "format": "prettier --write ."
   },
   "peerDependencies": {
@@ -42,8 +42,8 @@
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "0.80.7",
     "@types/node": "26.1.1",
-    "@typescript/native-preview": "7.0.0-dev.20260707.2",
     "prettier": "3.9.5",
+    "typescript": "7.0.2",
     "vitest": "4.1.10"
   },
   "engines": {
