@@ -1,0 +1,21 @@
+package.json
+  s_9fae4a6bb4598b::t_3bab5d400d99cf 3,36,46
+package-lock.json
+  s_9fae4a6bb4598b::t_d2012489824a71 3,9,15,558,2403-2409,2412-2415,2418-2423,2437-2440,2454-2491,2505-2508,2522-2610,2624-2712,2726-2729,3458-3492
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "c5351fdd49e482efbcbdb9510ed71908e5e66e62",
+  "prompts": {},
+  "sessions": {
+    "s_9fae4a6bb4598b": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f6219-9d10-7eb2-bb44-1863297a54fb",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "TheBinaryGuy <hello@thebinary.dev>"
+    }
+  }
+}
