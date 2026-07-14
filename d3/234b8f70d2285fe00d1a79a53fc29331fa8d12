@@ -1,0 +1,38 @@
+extensions/openai-codex-fast-mode.ts
+  s_9fae4a6bb4598b::t_fd163b8617c3e5 1-121
+  s_9fae4a6bb4598b::t_12312d5b1e7c27 122-134
+test/openai-codex-fast-mode.test.ts
+  s_9fae4a6bb4598b::t_84ac976f6eb4db 1-4,7-31,33-56,58-66,195
+  s_9fae4a6bb4598b::t_8644acfcacc210 5-6,67-194
+  s_9fae4a6bb4598b::t_1083818eccb8d9 32,57
+LICENSE
+  s_9fae4a6bb4598b::t_e3aa3b536165bc 1-21
+.gitignore
+  s_9fae4a6bb4598b::t_4b1b3a46cae6ba 1-3
+tsconfig.json
+  s_9fae4a6bb4598b::t_54d47442559544 1-7,9-13
+  s_9fae4a6bb4598b::t_ab3e28b16a996a 8
+package.json
+  s_9fae4a6bb4598b::t_44b1bd30789236 36,43-47
+  s_9fae4a6bb4598b::t_da72cab4583c4f 1-35,37-42,48-52
+README.md
+  s_9fae4a6bb4598b::t_06ed461dd53ce9 1-65
+package-lock.json
+  s_9fae4a6bb4598b::t_524d2e38382696 1-3452
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "d3234b8f70d2285fe00d1a79a53fc29331fa8d12",
+  "prompts": {},
+  "sessions": {
+    "s_9fae4a6bb4598b": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f6219-9d10-7eb2-bb44-1863297a54fb",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "TheBinaryGuy <hello@thebinary.dev>"
+    }
+  }
+}
