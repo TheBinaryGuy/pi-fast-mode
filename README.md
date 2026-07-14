@@ -33,7 +33,13 @@ Restart Pi after installing, or run `/reload` in an existing session.
 /fast status   Show the current state
 ```
 
-When enabled, Pi shows `fast` in the status area.
+When enabled, Pi adds `fast` to the built-in model status:
+
+```text
+gpt-5.6-sol • high • fast
+```
+
+The custom footer is active only while Fast mode is enabled. Pi supports one custom footer at a time, so another extension that installs a custom footer may override this indicator.
 
 ## Persistence
 

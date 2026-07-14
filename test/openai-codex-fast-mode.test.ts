@@ -1,8 +1,8 @@
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, describe, expect, it } from "vitest";
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import { initTheme, type ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import openaiCodexFastMode, {
   readFastModeState,
   supportsFastMode,
@@ -10,6 +10,10 @@ import openaiCodexFastMode, {
 } from "../extensions/openai-codex-fast-mode.ts";
 
 const temporaryDirectories: string[] = [];
+
+beforeAll(() => {
+  initTheme("dark", false);
+});
 
 function createStatePath(): string {
   const directory = mkdtempSync(join(tmpdir(), "pi-fast-mode-"));
@@ -70,6 +74,23 @@ describe("persistent state", () => {
 type ExtensionHandler = (event: unknown, context: unknown) => unknown;
 type CommandHandler = (args: string, context: unknown) => Promise<void>;
 
+interface FooterComponent {
+  render(width: number): string[];
+}
+
+interface FooterFactory {
+  (
+    tui: { requestRender(): void },
+    theme: { fg(_color: string, text: string): string },
+    footerData: {
+      getGitBranch(): string | null;
+      getExtensionStatuses(): ReadonlyMap<string, string>;
+      getAvailableProviderCount(): number;
+      onBranchChange(_callback: () => void): () => void;
+    },
+  ): FooterComponent;
+}
+
 function createExtensionHarness() {
   const handlers = new Map<string, ExtensionHandler>();
   let commandHandler: CommandHandler | undefined;
@@ -80,6 +101,9 @@ function createExtensionHarness() {
     },
     registerCommand(_name: string, command: { handler: CommandHandler }) {
       commandHandler = command.handler;
+    },
+    getThinkingLevel() {
+      return "high";
     },
   } as unknown as ExtensionAPI;
 
@@ -99,28 +123,68 @@ function createExtensionHarness() {
 }
 
 function createContext(modelId = "gpt-5.6-sol") {
-  const statuses: Array<string | undefined> = [];
+  const footers: Array<FooterFactory | undefined> = [];
   const notifications: string[] = [];
 
   return {
     context: {
+      mode: "tui",
       model: {
         id: modelId,
         provider: "openai-codex",
         api: "openai-codex-responses",
+        reasoning: true,
+        contextWindow: 372_000,
+      },
+      modelRegistry: {
+        isUsingOAuth() {
+          return true;
+        },
+      },
+      sessionManager: {
+        getEntries() {
+          return [];
+        },
+        getCwd() {
+          return "/tmp/project";
+        },
+        getSessionName() {
+          return undefined;
+        },
+      },
+      getContextUsage() {
+        return { tokens: 0, contextWindow: 372_000, percent: 0 };
       },
       ui: {
-        setStatus(_key: string, value: string | undefined) {
-          statuses.push(value);
+        setFooter(factory: FooterFactory | undefined) {
+          footers.push(factory);
         },
         notify(message: string) {
           notifications.push(message);
         },
       },
     },
-    statuses,
+    footers,
     notifications,
   };
+}
+
+function stripAnsi(value: string): string {
+  return value.replace(/\u001b\[[0-9;]*m/g, "");
+}
+
+function renderFooter(factory: FooterFactory): string[] {
+  const component = factory(
+    { requestRender() {} },
+    { fg: (_color, text) => text },
+    {
+      getGitBranch: () => "main",
+      getExtensionStatuses: () => new Map(),
+      getAvailableProviderCount: () => 1,
+      onBranchChange: () => () => {},
+    },
+  );
+  return component.render(120);
 }
 
 describe("extension", () => {
@@ -145,7 +209,11 @@ describe("extension", () => {
     const secondContext = createContext();
     second.getHandler("session_start")({}, secondContext.context);
 
-    expect(secondContext.statuses.at(-1)).toBe("fast");
+    const footer = secondContext.footers.at(-1);
+    expect(footer).toBeTypeOf("function");
+    expect(stripAnsi(renderFooter(footer!)[1]!)).toContain(
+      "gpt-5.6-sol • high • fast",
+    );
     expect(
       readFastModeState(join(agentDir, "openai-codex-fast-mode.json")),
     ).toEqual({
@@ -181,10 +249,12 @@ describe("extension", () => {
     process.env.PI_CODING_AGENT_DIR = agentDir;
 
     const harness = createExtensionHarness();
-    const { context } = createContext();
+    const contextState = createContext();
+    const { context } = contextState;
     await harness.getCommandHandler()("on", context);
     await harness.getCommandHandler()("off", context);
 
+    expect(contextState.footers.at(-1)).toBeUndefined();
     expect(
       harness.getHandler("before_provider_request")(
         { payload: { model: "gpt-5.6-sol" } },

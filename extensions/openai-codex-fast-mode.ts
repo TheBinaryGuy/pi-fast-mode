@@ -8,12 +8,14 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import {
+  FooterComponent,
   getAgentDir,
   type ExtensionAPI,
   type ExtensionContext,
 } from "@earendil-works/pi-coding-agent";
+import { visibleWidth } from "@earendil-works/pi-tui";
 
-const STATUS_KEY = "openai-codex-fast-mode";
+const FAST_LABEL = "fast";
 const STATE_FILE_NAME = "openai-codex-fast-mode.json";
 
 interface FastModeState {
@@ -61,15 +63,68 @@ export function writeFastModeState(
 export default function openaiCodexFastMode(pi: ExtensionAPI) {
   const statePath = join(getAgentDir(), STATE_FILE_NAME);
   let fastModeEnabled = readFastModeState(statePath).enabled;
+  let footerInstalled = false;
 
-  function updateStatus(ctx: ExtensionContext): void {
-    ctx.ui.setStatus(STATUS_KEY, fastModeEnabled ? "fast" : undefined);
+  function installFastModeFooter(ctx: ExtensionContext): void {
+    if (footerInstalled || ctx.mode !== "tui") return;
+
+    ctx.ui.setFooter((tui, theme, footerData) => {
+      const sessionAdapter = {
+        get state() {
+          return {
+            model: ctx.model,
+            thinkingLevel: pi.getThinkingLevel(),
+          };
+        },
+        sessionManager: ctx.sessionManager,
+        modelRegistry: ctx.modelRegistry,
+        getContextUsage: () => ctx.getContextUsage(),
+      };
+      const defaultFooter = new FooterComponent(
+        sessionAdapter as never,
+        footerData,
+      );
+      const unsubscribe = footerData.onBranchChange(() => tui.requestRender());
+      const fastSuffix = ` • ${FAST_LABEL}`;
+      const fastSuffixWidth = visibleWidth(fastSuffix);
+
+      return {
+        dispose() {
+          unsubscribe();
+          defaultFooter.dispose();
+        },
+        invalidate() {
+          defaultFooter.invalidate();
+        },
+        render(width: number): string[] {
+          const lines = defaultFooter.render(width);
+          const modelId = ctx.model?.id;
+          if (!modelId || width <= fastSuffixWidth) return lines;
+
+          const compactLines = defaultFooter.render(width - fastSuffixWidth);
+          const compactStatsLine = compactLines[1];
+          if (!compactStatsLine?.includes(modelId)) return lines;
+
+          lines[1] = compactStatsLine + theme.fg("dim", fastSuffix);
+          return lines;
+        },
+      };
+    });
+
+    footerInstalled = true;
+  }
+
+  function removeFastModeFooter(ctx: ExtensionContext): void {
+    if (!footerInstalled || ctx.mode !== "tui") return;
+    ctx.ui.setFooter(undefined);
+    footerInstalled = false;
   }
 
   function setFastMode(enabled: boolean, ctx: ExtensionContext): void {
     writeFastModeState(statePath, { enabled });
     fastModeEnabled = enabled;
-    updateStatus(ctx);
+    if (enabled) installFastModeFooter(ctx);
+    else removeFastModeFooter(ctx);
     ctx.ui.notify(
       `OpenAI Codex Fast mode ${enabled ? "enabled" : "disabled"}`,
       "info",
@@ -78,7 +133,7 @@ export default function openaiCodexFastMode(pi: ExtensionAPI) {
 
   pi.on("session_start", (_event, ctx) => {
     fastModeEnabled = readFastModeState(statePath).enabled;
-    updateStatus(ctx);
+    if (fastModeEnabled) installFastModeFooter(ctx);
   });
 
   pi.registerCommand("fast", {
