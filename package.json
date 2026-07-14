@@ -1,17 +1,20 @@
 {
-  "name": "pi-openai-codex-fast-mode",
-  "version": "0.2.0",
+  "name": "@thebinaryguy/pi-fast-mode",
+  "version": "0.2.1",
   "description": "Toggle persistent OpenAI Codex Fast mode in Pi using priority service tier requests.",
   "type": "module",
   "license": "MIT",
   "author": "TheBinaryGuy",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheBinaryGuy/pi-openai-codex-fast-mode.git"
+    "url": "git+https://github.com/TheBinaryGuy/pi-fast-mode.git"
   },
-  "homepage": "https://github.com/TheBinaryGuy/pi-openai-codex-fast-mode#readme",
+  "homepage": "https://github.com/TheBinaryGuy/pi-fast-mode#readme",
   "bugs": {
-    "url": "https://github.com/TheBinaryGuy/pi-openai-codex-fast-mode/issues"
+    "url": "https://github.com/TheBinaryGuy/pi-fast-mode/issues"
   },
   "keywords": [
     "pi-package",

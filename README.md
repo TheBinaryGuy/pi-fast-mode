@@ -1,4 +1,4 @@
-# pi-openai-codex-fast-mode
+# @thebinaryguy/pi-fast-mode
 
 A [Pi](https://pi.dev) extension that adds a persistent, toggleable Fast mode for supported OpenAI Codex models.
 
@@ -13,13 +13,13 @@ When Fast mode is enabled, matching requests include:
 ## Install
 
 ```bash
-pi install npm:pi-openai-codex-fast-mode
+pi install npm:@thebinaryguy/pi-fast-mode
 ```
 
 Or install directly from GitHub:
 
 ```bash
-pi install git:github.com/TheBinaryGuy/pi-openai-codex-fast-mode
+pi install git:github.com/TheBinaryGuy/pi-fast-mode
 ```
 
 Restart Pi after installing, or run `/reload` in an existing session.
