@@ -1,5 +1,8 @@
 # @thebinaryguy/pi-fast-mode
 
+[![npm version](https://img.shields.io/npm/v/@thebinaryguy/pi-fast-mode.svg?style=flat-square)](https://www.npmjs.com/package/@thebinaryguy/pi-fast-mode)
+[![Pi package](https://img.shields.io/badge/Pi-package-6f42c1?style=flat-square)](https://pi.dev/packages/@thebinaryguy/pi-fast-mode)
+
 A [Pi](https://pi.dev) extension that adds a persistent, toggleable Fast mode for supported OpenAI Codex models.
 
 When Fast mode is enabled, matching requests include:
