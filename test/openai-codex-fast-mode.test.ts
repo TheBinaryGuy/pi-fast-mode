@@ -211,9 +211,9 @@ describe("extension", () => {
 
     const footer = secondContext.footers.at(-1);
     expect(footer).toBeTypeOf("function");
-    expect(stripAnsi(renderFooter(footer!)[1]!)).toContain(
-      "gpt-5.6-sol • high • fast",
-    );
+    const renderedFooter = stripAnsi(renderFooter(footer!)[1]!);
+    expect(renderedFooter).toContain("$0.000 (sub)");
+    expect(renderedFooter).toContain("gpt-5.6-sol • high • fast");
     expect(
       readFastModeState(join(agentDir, "openai-codex-fast-mode.json")),
     ).toEqual({

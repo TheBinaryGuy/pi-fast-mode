@@ -77,7 +77,15 @@ export default function openaiCodexFastMode(pi: ExtensionAPI) {
           };
         },
         sessionManager: ctx.sessionManager,
-        modelRegistry: ctx.modelRegistry,
+        modelRuntime: {
+          isUsingOAuth(providerId: string) {
+            const model = ctx.model;
+            return (
+              model?.provider === providerId &&
+              ctx.modelRegistry.isUsingOAuth(model)
+            );
+          },
+        },
         getContextUsage: () => ctx.getContextUsage(),
       };
       const defaultFooter = new FooterComponent(
